@@ -20,6 +20,7 @@ int main(int argc, char* args[])
 	const int SCREEN_WIDTH = 1280, SCREEN_HEIGHT = 680;
 	bool quit = false;
 	
+	
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 	}
@@ -33,28 +34,53 @@ int main(int argc, char* args[])
 		else
 		{
 			blockRender = SDL_CreateRenderer(window, -1, 0);
-			while (rect.x <= 1280 && rect.x >= 0 && rect.y >= 0 && rect.y <= 680) {
-				
+			while (!quit) {
+					while (SDL_PollEvent(&e))
+					{
+						if (e.type == SDL_QUIT) {
+							quit = true;
+							break;
+						}
+						switch (e.type)
+						{
+						case SDL_QUIT:
+							quit = true;
+							break;
+						case SDL_KEYDOWN:
+							switch(e.key.keysym.sym)
+							{
+							case SDLK_UP:
+								rect.y -= 10;
+								break;
+							case SDLK_DOWN:
+								rect.y += 10;
+								break;
+							case SDLK_RIGHT:
+								rect.x += 10;
+								break;
+							case SDLK_LEFT:
+								rect.x -= 10;
+								break;
+							case SDLK_SPACE:
+								blast.x = rect.x + 80;
+								blast.y = rect.y + 30;
+								blast.x++;
+								break;
+							}
+						}
+					}
+
 				//Renders
-				SDL_SetRenderDrawColor(blockRender, 0, 123, 255, 255);
+				SDL_SetRenderDrawColor(blockRender, 0, 0, 255, 255);
 				SDL_RenderClear(blockRender);
 				SDL_SetRenderDrawColor(blockRender, 255, 0, 0, 255);
 				SDL_RenderFillRect(blockRender, &rect);
 				SDL_SetRenderDrawColor(blockRender, 0, 255, 0, 255);
 				SDL_RenderFillRect(blockRender, &blast);
 				SDL_RenderPresent(blockRender);
-				break;
+				
 			}
-			//QUIT
-			while (!quit) {
-
-				while (SDL_PollEvent(&e) != 0) {
-					if (e.type == SDL_QUIT) {
-						quit = true;
-						break;
-					}
-				}
-			}
+			
 		}
 		SDL_DestroyWindow(window);
 		SDL_Quit();
