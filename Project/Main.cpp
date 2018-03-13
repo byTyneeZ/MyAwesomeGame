@@ -26,7 +26,7 @@ int main(int argc, char* args[])
 	bool quit = false;
 	bool alive = true;
 	int velX = 1, velY = 1;
-	bool mup = false, mdown = false, mleft = false, mright = false;
+	bool mup = false, mdown = false, mleft = false, mright = false, mshoot = false;
 
 	/*struct Bullet {
 		bool shooting;
@@ -57,8 +57,7 @@ int main(int argc, char* args[])
 
 	SDL_RenderCopy(blockRender, image_texture, NULL, &texture_destination);*/
 
-
-
+	
 	if (SDL_Init(SDL_INIT_VIDEO) < 0){ }
 	else
 	{
@@ -89,6 +88,9 @@ int main(int argc, char* args[])
 						case SDLK_LEFT:
 							mleft = false;
 							break;
+						case SDLK_SPACE:
+							mshoot = false;
+							break;
 						}
 					}
 					if (e.type == SDL_KEYDOWN)
@@ -108,9 +110,7 @@ int main(int argc, char* args[])
 							mleft = true;
 							break;
 						case SDLK_SPACE:
-							blast.x = rect.x + 30;
-							blast.y = rect.y + 30;
-							blast.x++;
+							mshoot = true;
 							break;
 						case SDLK_ESCAPE:
 							quit = true;
@@ -139,6 +139,11 @@ int main(int argc, char* args[])
 					rect.y += velY;
 					SDL_Delay(1);
 				}
+				if (mshoot == true) {
+					blast.y = rect.y + 30;
+					blast.x = rect.x + 30 + velX;
+				}
+
 				//Renders
 				SDL_SetRenderDrawColor(blockRender, 0, 0, 255, 255);
 				SDL_RenderClear(blockRender);
